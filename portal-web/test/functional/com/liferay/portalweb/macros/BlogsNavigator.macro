@@ -7,14 +7,13 @@
 
 	<command name="gotoAddEntry">
 		<if>
-			<condition function="IsElementPresent" locator1="Blogs#ADD_BLOGS_ENTRY" />
+			<condition function="IsNotVisible" locator1="Blogs#ADD_BLOGS_ENTRY" />
 			<then>
-				<execute function="AssertClick" locator1="Blogs#ADD_BLOGS_ENTRY" value1="Add Blog Entry" />
-			</then>
-			<else>
 				<execute function="Click" locator1="Button#PLUS" />
-			</else>
+			</then>
 		</if>
+
+		<execute function="AssertClick" locator1="Blogs#ADD_BLOGS_ENTRY" value1="Add Blog Entry" />
 
 		<execute function="AssertVisible" locator1="BlogsEntry#ENTRY_COVER_IMAGE_SELECT_FILE" />
 	</command>
