@@ -16,27 +16,32 @@
 </tr>
 <tr>
 	<td>STAGING_LOCAL_LIVE</td>
-	<td>//input[contains(@id,'local')]</td>
+	<td>//label[contains(.,'Local Live')]//span</td>
 	<td></td>
 </tr>
 <tr>
 	<td>STAGING_REMOTE_LIVE</td>
-	<td>//input[contains(@id,'remote')]</td>
+	<td>//label[contains(.,'remote')]//span</td>
 	<td></td>
 </tr>
 <tr>
 	<td>ENABLED_ON_PUBLIC_PAGES_CHECKBOX</td>
-	<td>//input[contains(@id,'branchingPublic')]</td>
+	<td>//label[contains(.,'Public Pages')]//span</td>
 	<td></td>
 </tr>
 <tr>
 	<td>ENABLED_ON_PRIVATE_PAGES_CHECKBOX</td>
-	<td>//input[contains(@id,'branchingPrivate')]</td>
+	<td>//label[contains(.,'Private Pages')]//span</td>
 	<td></td>
 </tr>
 <tr>
 	<td>CONTENT_CHECKBOX</td>
-	<td>//div[contains(@id,'StagingConfigurationPortlet_staged')]//label[contains(.,'${key_contentName}')]/input</td>
+	<td>//div[contains(@id,'StagingConfigurationPortlet_staged')]//label[contains(.,'${key_contentName}')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>CONTENT_SELECT_ALL_CHECKBOX</td>
+	<td>//label[contains(.,'Select All')]</td>
 	<td></td>
 </tr>
 <tr>
