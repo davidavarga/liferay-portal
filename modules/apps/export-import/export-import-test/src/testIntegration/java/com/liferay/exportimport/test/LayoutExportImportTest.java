@@ -449,6 +449,26 @@ public class LayoutExportImportTest extends BaseExportImportTestCase {
 		exportImportLayouts(layoutIds, getImportParameterMap());
 	}
 
+	@Test
+	public void testImportPrivateLayouts() throws Exception {
+
+		LayoutTestUtil.addLayout(group, true);
+
+		List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(
+			group.getGroupId(), true);
+
+		exportLayouts(
+			ExportImportHelperUtil.getLayoutIds(layouts),
+			getExportParameterMap(), true);
+
+		importLayouts(getImportParameterMap(), true);
+
+		Assert.assertEquals(
+			"Layout counts do not match",
+			LayoutLocalServiceUtil.getLayoutsCount(group, true),
+			LayoutLocalServiceUtil.getLayoutsCount(importedGroup, true));
+	}
+
 	protected void testAvailableLocales(
 			Collection<Locale> sourceAvailableLocales,
 			Collection<Locale> targetAvailableLocales, boolean expectFailure)

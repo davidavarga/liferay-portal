@@ -61,25 +61,7 @@ public abstract class BaseExportImportTestCase {
 	public void importLayouts(Map<String, String[]> parameterMap)
 		throws Exception {
 
-		User user = TestPropsValues.getUser();
-
-		Map<String, Serializable> importLayoutSettingsMap =
-			ExportImportConfigurationSettingsMapFactoryUtil.
-				buildImportLayoutSettingsMap(
-					user, importedGroup.getGroupId(), false, null,
-					parameterMap);
-
-		ExportImportConfiguration exportImportConfiguration =
-			ExportImportConfigurationLocalServiceUtil.
-				addExportImportConfiguration(
-					user.getUserId(), importedGroup.getGroupId(),
-					StringPool.BLANK, StringPool.BLANK,
-					ExportImportConfigurationConstants.TYPE_IMPORT_LAYOUT,
-					importLayoutSettingsMap, WorkflowConstants.STATUS_DRAFT,
-					new ServiceContext());
-
-		ExportImportServiceUtil.importLayouts(
-			exportImportConfiguration, larFile);
+		importLayouts(parameterMap, false);
 	}
 
 	@Before
@@ -148,6 +130,55 @@ public abstract class BaseExportImportTestCase {
 	protected void deleteStagedModel(StagedModel stagedModel) throws Exception {
 	}
 
+	protected void doExportLayouts(
+			long[] layoutIds, Map<String, String[]> parameterMap,
+			Boolean privateLayouts)
+		throws Exception {
+
+		User user = TestPropsValues.getUser();
+
+		Map<String, Serializable> exportLayoutSettingsMap =
+			ExportImportConfigurationSettingsMapFactoryUtil.
+				buildExportLayoutSettingsMap(
+					user, group.getGroupId(), privateLayouts, layoutIds,
+					parameterMap);
+
+		ExportImportConfiguration exportImportConfiguration =
+			ExportImportConfigurationLocalServiceUtil.
+				addDraftExportImportConfiguration(
+					user.getUserId(),
+					ExportImportConfigurationConstants.TYPE_EXPORT_LAYOUT,
+					exportLayoutSettingsMap);
+
+		larFile = ExportImportServiceUtil.exportLayoutsAsFile(
+			exportImportConfiguration);
+	}
+
+	protected void doImportLayouts(
+			Map<String, String[]> parameterMap, Boolean privateLayouts)
+		throws Exception {
+
+		User user = TestPropsValues.getUser();
+
+		Map<String, Serializable> importLayoutSettingsMap =
+			ExportImportConfigurationSettingsMapFactoryUtil.
+				buildImportLayoutSettingsMap(
+					user, importedGroup.getGroupId(), privateLayouts, null,
+					parameterMap);
+
+		ExportImportConfiguration exportImportConfiguration =
+			ExportImportConfigurationLocalServiceUtil.
+				addExportImportConfiguration(
+					user.getUserId(), importedGroup.getGroupId(),
+					StringPool.BLANK, StringPool.BLANK,
+					ExportImportConfigurationConstants.TYPE_IMPORT_LAYOUT,
+					importLayoutSettingsMap, WorkflowConstants.STATUS_DRAFT,
+					new ServiceContext());
+
+		ExportImportServiceUtil.importLayouts(
+			exportImportConfiguration, larFile);
+	}
+
 	protected void exportImportLayouts(
 			long[] layoutIds, Map<String, String[]> parameterMap)
 		throws Exception {
@@ -161,22 +192,14 @@ public abstract class BaseExportImportTestCase {
 			long[] layoutIds, Map<String, String[]> parameterMap)
 		throws Exception {
 
-		User user = TestPropsValues.getUser();
+		exportLayouts(layoutIds, parameterMap, false);
+	}
 
-		Map<String, Serializable> exportLayoutSettingsMap =
-			ExportImportConfigurationSettingsMapFactoryUtil.
-				buildExportLayoutSettingsMap(
-					user, group.getGroupId(), false, layoutIds, parameterMap);
+	protected void exportLayouts(
+		long[] layoutIds, Map<String, String[]> parameterMap,
+		Boolean privateLayouts) throws Exception {
 
-		ExportImportConfiguration exportImportConfiguration =
-			ExportImportConfigurationLocalServiceUtil.
-				addDraftExportImportConfiguration(
-					user.getUserId(),
-					ExportImportConfigurationConstants.TYPE_EXPORT_LAYOUT,
-					exportLayoutSettingsMap);
-
-		larFile = ExportImportServiceUtil.exportLayoutsAsFile(
-			exportImportConfiguration);
+		doExportLayouts(layoutIds, parameterMap, privateLayouts);
 	}
 
 	protected AssetEntry getAssetEntry(StagedModel stagedModel)
@@ -246,6 +269,13 @@ public abstract class BaseExportImportTestCase {
 		throws PortalException {
 
 		return stagedModel.getUuid();
+	}
+
+	protected void importLayouts(
+			Map<String, String[]> parameterMap, Boolean privateLayouts)
+		throws Exception {
+
+		doImportLayouts(parameterMap, privateLayouts);
 	}
 
 	protected void validateImportedStagedModel(
